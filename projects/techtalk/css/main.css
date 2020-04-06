@@ -1,0 +1,45 @@
+html {
+    background-color: #7bc3d1;
+
+}
+body {
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    background: white;
+    max-width: 75%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 4em;
+}
+p {
+    text-align: left;
+    font-size: 14pt;
+    line-height: 1.75;
+}
+a {
+    color: gray;
+    text-decoration: none;
+}
+ul, ol {
+    text-align: left;
+}
+.body-maintext {
+    max-width: 85%;
+    margin-right: auto;
+    margin-left: auto;
+}
+.body-section {
+    margin-bottom:10%;
+}
+.btn {
+    background-color: #7bc3d1;
+    border-radius: 8px;
+    font-size: 20px;
+    border-style: solid;
+    padding: 10px 15px;
+    color: white;
+    text-align: center;
+}
+

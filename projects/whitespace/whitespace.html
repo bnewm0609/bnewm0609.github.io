@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zero-Width Encoding</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        var zws = "\u200b";
+        function encrypt(message, plaintext, html_flag) {
+            //alert(message);
+            if (html_flag === "html") {
+                zws = "&#x200b;";
+            } else {
+                zws = "\u200b";
+            }
+
+            while ((message.length)*8*(zws.length) > (plaintext.length)){
+                plaintext += " ";
+                //console.log("hi");
+            }
+
+            console.log(plaintext);
+            message_chrs = message.split("");
+            console.log(message_chrs);
+            var message_nums = message_chrs.map(function(chr) {
+                //console.log(chr.charCodeAt());
+                return chr.charCodeAt();
+            });
+            //console.log(message_nums);
+            var enc_str = "";
+            var save_ind = 0;
+            
+            for (var i = 0; i < 8*(message_nums.length); i++) {
+                //console.log(i/8);
+                if (message_nums[Math.floor(i / 8)] & 1 << i%8) {
+                    //console.log("zws");
+                    enc_str += zws;
+                } 
+                enc_str += plaintext[i];
+                save_ind = i;
+            };
+            enc_str += plaintext.substring(save_ind+1, plaintext.length);
+            //console.log(enc_str);
+
+            return enc_str;
+        };
+
+        function decrypt(decr) {
+
+            //console.log(decr.length);
+            var msg = "";
+            var bit_count = 0;
+            var full_byte = 0;
+            
+            var i = 0;
+            while (i < decr.length) {
+                //console.log("hello there");
+                if (decr.substring(i, i+zws.length) === zws) {
+                    //console.log("I found the thing");
+                    full_byte |= (1 << (bit_count % 8));
+                    i+=zws.length;
+                }
+                bit_count++;
+                //console.log(bit_count);
+                if (bit_count % 8 === 0) {
+                    //console.log("Hello! " + full_byte);
+                    msg += String.fromCharCode(full_byte);
+                    full_byte = 0;
+
+                }
+                i++;
+            };
+            //console.log(msg);
+            return msg; 
+        };
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#submit").click(function () {
+                var msg = $("#secret").val();
+                var pltxt = $("#plaintext").val();
+                var html_flag = $("input[name=encoding]:checked").val();
+                var encr = encrypt(msg, pltxt, html_flag);
+                $("#encrypted-message").text(encr);
+                //$("#encrypted-message").fadeOut().fadeIn('slow');
+            });
+            $("#decrypt").click(function () {
+                var msg = $("#enc-msg").val();
+                var decr = decrypt(msg);
+                $("#decrypted-message").text(decr);
+                //$("#decrypted-message").fadeOut().fadeIn('slow');
+            });
+        });
+
+    </script>
+
+    <style>
+        html {
+            background-color: #7bc3d1;
+
+        }
+        body {
+            /*font-family: 'Source Sans Pro';*/
+            font-family: 'Open Sans', sans-serif;
+            text-align: center;
+            background: white;
+            max-width: 50em;
+            margin-right: auto;
+            margin-left: auto;
+            margin-top: 0;
+            margin-bottom: 0;
+            padding: 4em;
+        }
+        textarea {
+            font-size: 14px;
+	    resize: none;
+        }
+        .result {
+            font-size: 20px;
+            background-color: #f2e9de;
+            white-space: PRE;
+            max-width: 50em;
+            word-wrap: break-word;
+            text-align: left;
+        }
+        button {
+            background-color: #7bc3d1;
+            border-radius: 8px;
+            font-size: 20px;
+            border-style: solid;
+            padding: 10px 15px;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <h1> Welcome to the Zero-Width Whitespace Encrypter! </h1>
+    <h4>By Ben Newman</h4>
+    <h2>Encrypter:</h2>
+    <!--form name="queryform" method="post" onsubmit="return getData()"--> 
+
+        Secret Message:<br>
+        <textarea id="secret" cols="40" rows="5" ></textarea><br>
+        Plaintext:<br>
+        <textarea id="plaintext" cols="40" rows="5"></textarea><br>
+        Spacing type:<br>
+        <input type="radio" name="encoding" value="unicode" checked> Unicode<br>
+        <input type="radio" name="encoding" value="html"> HTML<br><br>
+        <button id="submit">Encrypt</button>
+    <!--/form-->
+    <p class="result-text" style="white-space:PRE"><span id="encrypted-message" class="result"></span></p>
+    <hr>
+    <h2> Decrypter:</h2>
+    Encrypted Message: <br>
+    <textarea id="enc-msg" cols="40" rows="5"></textarea><br>
+    <button id="decrypt">Decrypt</button>
+    <div class"result">
+        <p class="result-text"><span id="decrypted-message" class="result"></span></p>
+    </div>
+</body>
+</html>
