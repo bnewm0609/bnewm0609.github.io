@@ -8,6 +8,7 @@ body, html {
 }
 h1 {
 	font-weight: 700;
+	color: #121d1f;
 }
 h1 strong {
 	font-weight: 900;
@@ -37,7 +38,8 @@ p.intro {
 	font-family: 'Open Sans', sans-serif;
 }
 a {
-	color: #333;
+	/*color: #333;*/
+	color: #7bc3d1;
 }
 a:hover, a:focus {
 	text-decoration: none;
@@ -181,7 +183,9 @@ hr {
     width: 75%;
 }
 .btn-project p {
+    margin: 2px 0;
     text-align: left;
+    /*line-height: 0px;*/
 }
 .btn-project a {
     /*color: #262F3B;*/
@@ -209,7 +213,8 @@ hr {
 }
 /* About Section */
 #about {
-	padding: 100px 0;
+	/*padding: 100px 0;*/
+	padding: 30px 0 10px;
 	background: #f6f6f6;
 }
 #about .about-text {
@@ -224,11 +229,13 @@ hr {
 #about p {
 	margin-top: 20px;
 	margin-bottom: 30px;
+	/*margin-bottom: 30px;*/
     font-size: 16px;
 }
 /* Projects Section */
 #projects {
-	padding: 100px 0;
+	/*padding: 100px 0;*/
+	padding: 10px 0;
 	background: #7bc3d1;
 }
 #projects h2 {
