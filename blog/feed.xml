@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="www.blnewman.com/feed.xml" rel="self" type="application/atom+xml" /><link href="www.blnewman.com/" rel="alternate" type="text/html" /><updated>2021-05-06T10:08:24-07:00</updated><id>www.blnewman.com/feed.xml</id><title type="html">Ben Newman</title><subtitle>#Linguistics, Natural Language Processing, </subtitle><entry><title type="html">Refining Targeted Syntactic Evaluation</title><link href="www.blnewman.com/2021/05/03/refining-tse.html" rel="alternate" type="text/html" title="Refining Targeted Syntactic Evaluation" /><published>2021-05-03T00:00:00-07:00</published><updated>2021-05-03T00:00:00-07:00</updated><id>www.blnewman.com/2021/05/03/refining-tse</id><content type="html" xml:base="www.blnewman.com/2021/05/03/refining-tse.html">&lt;h1 id=&quot;refining-targeted-syntactic-evaluation&quot;&gt;Refining Targeted Syntactic Evaluation&lt;/h1&gt;
+&lt;h5 id=&quot;ben-newman&quot;&gt;Ben Newman&lt;/h5&gt;
+
+&lt;p&gt;&lt;em&gt;Improving Syntactic Evaluation to better understand what language models learn about linguistic structure.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;overview&quot;&gt;Overview&lt;/h2&gt;
+
+&lt;p&gt;Recent progress in creating amazing NLP models has inspired all sorts of applications. We can now build new &lt;strong&gt;technologies&lt;/strong&gt; (like news-summarizers, chatbots, autocomplete, etc.). We can also try to leverage these models to do &lt;strong&gt;science&lt;/strong&gt;, like working to better understand how people use and process language (and the world!).&lt;/p&gt;
+
+&lt;p&gt;An important goal for NLP researchers is to make sure that these models are useful for both of these situations. For engineering applications, this might include ensuring models generate text that is factually accurate, coherent, not harmful, etc. And for scientific applications, we might want to ensure that model’s probabilities match people’s beliefs of how probable words are, and that models are accurate and systematic both across languages.&lt;/p&gt;
+
+&lt;p&gt;As distinct as these engineering and scientific applications may seem, they both require a fundamental understanding of the rules underlying how language is structured—which linguists broadly refer to as &lt;em&gt;syntax&lt;/em&gt;. As an example, consider the classic following pair of sentences (taken from &lt;a href=&quot;https://www.aclweb.org/anthology/Q16-1037.pdf&quot;&gt;Linzen et al., 2016&lt;/a&gt;):&lt;/p&gt;
+
+&lt;p&gt;   (1)   a.   The keys to the cabinet &lt;strong&gt;are&lt;/strong&gt; on the table.&lt;br /&gt;
+           b. * The keys to the cabinet &lt;strong&gt;is&lt;/strong&gt; on the table.&lt;/p&gt;
+
+&lt;p&gt;In these sentences, the verb &lt;strong&gt;are&lt;/strong&gt; is preferred to the verb &lt;strong&gt;is&lt;/strong&gt; because the subject of the sentence, &lt;em&gt;keys&lt;/em&gt;, is plural. (Linguists denote unacceptable sentences with the symbol “*”.) This rule—that a verb’s conjugation has to agree with the number of the subject—is a rule of English syntax. &lt;sup id=&quot;fnref:1&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot; rel=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;For engineering applications we need models to use syntax effectively so they can interact with people naturally and coherently. In these settings, we are interested in evaluating the &lt;strong&gt;likely behavior&lt;/strong&gt; of our models, answering the question: &lt;strong&gt;Are our models likely to generate grammatical language?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;For scientific applications we need models that reflect how people understand syntax. Human language understanding is &lt;strong&gt;systematic&lt;/strong&gt;—we are able to easily apply the rules of syntax regardless of the identities of the words involved. In the above example, if we substitute a form of the verb “to sit” in for &lt;strong&gt;are&lt;/strong&gt;, we know &lt;strong&gt;sit&lt;/strong&gt; is preferred to &lt;strong&gt;sits&lt;/strong&gt; for the same reason &lt;strong&gt;are&lt;/strong&gt; is preferred to &lt;strong&gt;is&lt;/strong&gt;. Therefore, in these scientific settings, we want to evaluate the &lt;strong&gt;systematicity&lt;/strong&gt; of model’s syntactic understanding, answering the question: &lt;strong&gt;Are our models able to understand arbitrary grammatical phenomena?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Given the importance of syntax in these settings, how should we measure how well our models understand it?&lt;/p&gt;
+
+&lt;!--likely **behavior** and **systematicity** when it comes to understanding syntax?--&gt;
+
+&lt;p&gt;A fruitful line of work along uses a method called &lt;strong&gt;Targeted Syntactic Evaluation&lt;/strong&gt; (&lt;strong&gt;TSE&lt;/strong&gt;) (&lt;a href=&quot;https://www.aclweb.org/anthology/D18-1151.pdf&quot;&gt;Marvin and Linzen, 2018&lt;/a&gt;). This evaluation tests whether models can distinguish between pairs of sentences that differ only by a single grammatical property where only one is correct—called a &lt;em&gt;minimal pair&lt;/em&gt;. We could explore many different properties across many different languages, but a common testbed (and the one we focus on here) is whether the numbers of subjects and verbs match in present-tense English sentences—referred to as &lt;em&gt;subject-verb number agreement&lt;/em&gt;. The minimal pair in (1) provides an example that can be used to test subject-verb number agreement.&lt;/p&gt;
+
+&lt;p&gt;To illustrate how these evaluations work, let’s test our favorite neural models on the sentences in (1). We can pass BERT the sentence: “The keys to the cabinet &amp;lt;mask&amp;gt; on the table” with the verb masked out, and see if it puts more probability mass on &lt;strong&gt;are&lt;/strong&gt; or &lt;strong&gt;is&lt;/strong&gt;.&lt;/p&gt;
+&lt;div align=&quot;center&quot;&gt;
+  &lt;p&gt;&lt;img src=&quot;/assets/images/BERT-isare-prediction.pdf&quot; alt=&quot;An abstract representation of BERT being fed in sentence (1) from above and outputing a vector that contains are with probability 7.25% and is with probability 0.08%&quot; width=&quot;90%&quot; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In this case, BERT gets it right! It assigns a probability of \(7.25\)% to &lt;strong&gt;are&lt;/strong&gt; but only \(0.08\)% to &lt;strong&gt;is&lt;/strong&gt;.&lt;sup id=&quot;fnref:2&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:2&quot; class=&quot;footnote&quot; rel=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;However, TSE is often implemented using a small set of grammatical items: in the example above, the pair &lt;strong&gt;is&lt;/strong&gt;/&lt;strong&gt;are&lt;/strong&gt; might be one of the only ones tested. This means that to perform well, models only need to conjugate these verbs correctly–they don’t have to have systematic understanding of syntax or correctly conjugate verbs they deem likely.&lt;/p&gt;
+
+&lt;p&gt;In our work, we refine TSE evaluations to address this problem (and in doing so, the two goals outlined we outlined above). We introduce one metric, &lt;strong&gt;Model-Weighted Syntactic Evaluation&lt;/strong&gt; (&lt;strong&gt;MW&lt;/strong&gt;), focused on evaluating &lt;strong&gt;likely behavior&lt;/strong&gt;, and another, &lt;strong&gt;Equally Weighted Syntactic Evaluation&lt;/strong&gt; (&lt;strong&gt;EW&lt;/strong&gt;), focused on evaluating &lt;strong&gt;systematicity&lt;/strong&gt;. Both of these metrics draw their efficacy from a much larger set of verbs than previous work. We find that current minimal pair evaluations overestimate systematicity of language models, but that models score up to 40% better on verbs that they predict are likely in context. Our work will appear in NAACL and a preprint can be found &lt;a href=&quot;https://arxiv.org/abs/2104.09635&quot;&gt;here&lt;/a&gt; (with the code &lt;a href=&quot;https://github.com/bnewm0609/refining-tse&quot;&gt;here&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+&lt;p&gt;As neural models have gotten better, a lot of work has gone into measuring how well they understand various syntactic phenomena. This work predominantly falls into two categories: Representational Evaluation and Behavioral Evaluation.&lt;/p&gt;
+
+&lt;p&gt;In Representational Evaluation, often called probing, there is some hypothesis for how syntactic information is represented in the weights or hidden state representations of models. These methods train classifiers on top of model representations to predict the syntactic properties of tokens (like their part of speech, number, gender, syntactic role, etc.). A lot of work has gone into these methodologies and has found that syntactic properties are readily predictable from model representations, though it’s less clear if models are actually using this information when making predictions (&lt;a href=&quot;https://www.aclweb.org/anthology/2020.acl-main.386.pdf&quot;&gt;Jacovi and Goldberg, 2020&lt;/a&gt;; &lt;a href=&quot;https://www.aclweb.org/anthology/D19-1275.pdf&quot;&gt;Hewitt and Liang, 2019&lt;/a&gt;; &lt;a href=&quot;https://www.aclweb.org/anthology/2020.emnlp-main.254.pdf&quot;&gt;Pimentel et al., 2020&lt;/a&gt;; &lt;a href=&quot;https://www.aclweb.org/anthology/2020.emnlp-main.14.pdf&quot;&gt;Voita and Titov, 2020&lt;/a&gt;; &lt;a href=&quot;https://arxiv.org/pdf/2002.12327.pdf&quot;&gt;Rogers 2020&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;On the other hand, Behavioral Evaluation is not concerned with &lt;em&gt;how&lt;/em&gt; information is represented, only &lt;em&gt;whether&lt;/em&gt; model predictions reflect syntactic knowledge. It treats models as black boxes and uses their likelihoods to judge whether sentences are grammatical. The TSE evaluations that we focus on here fall into this category: we ask the models to judge whether one sentence is more acceptable than another when the two differ in only a single grammatical item (like distingushing between 1.a and 1.b).&lt;/p&gt;
+
+&lt;p&gt;There are a number of datasets that use scores of these minimal pair sentences. Some use sentences from &lt;a href=&quot;https://www.aclweb.org/anthology/Q16-1037.pdf&quot;&gt;natural&lt;/a&gt; &lt;a href=&quot;https://www.aclweb.org/anthology/P18-1132.pdf&quot;&gt;corpora&lt;/a&gt; and others use &lt;a href=&quot;https://www.aclweb.org/anthology/P18-1132.pdf&quot;&gt;procedurally&lt;/a&gt; &lt;a href=&quot;https://www.aclweb.org/anthology/D18-1151.pdf&quot;&gt;generated&lt;/a&gt; or &lt;a href=&quot;https://www.aclweb.org/anthology/2020.tacl-1.3.pdf&quot;&gt;carefully constructed&lt;/a&gt; sentences to investigate interesting syntactic phenomena. Some work even looks at &lt;a href=&quot;https://www.aclweb.org/anthology/N18-1108.pdf&quot;&gt;nonsensical sentences&lt;/a&gt;, arguing that using natural or felicitous sentences does not isolate syntactic ability from more surface-level co-occurrence information.&lt;/p&gt;
+
+&lt;p&gt;Elaborating on this latter example, one concern we might have is that in our example minimal pair above, the word &lt;em&gt;keys&lt;/em&gt; often co-occurs with the verb &lt;strong&gt;are&lt;/strong&gt;, and our models are picking up on this pattern rather than the deeper syntactic generalization that &lt;em&gt;keys&lt;/em&gt; is plural, so if &lt;em&gt;keys&lt;/em&gt; are &lt;em&gt;being&lt;/em&gt;, the correct verb form is the third-person plural, &lt;strong&gt;are&lt;/strong&gt;. A solution to this predicament would be to create completely nonsensical minimal pairs where is very unlikely that the main verb and the subject co-occur in the training corpus. For example, you can use minimal pair sentences like:&lt;/p&gt;
+
+&lt;p&gt;   (2)   a.   Cats provide their ownership but &lt;strong&gt;spend&lt;/strong&gt; her huge manufacturer and the pup cares.&lt;br /&gt;
+           b. *Cats provide their ownership but &lt;strong&gt;spends&lt;/strong&gt; her huge manufacturer and the pup cares.&lt;br /&gt;
+(From &lt;a href=&quot;https://www.aclweb.org/anthology/N18-1108.pdf&quot;&gt;Gulordava et al. (2020)&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.aclweb.org/anthology/N18-1108.pdf&quot;&gt;Gulordava et al. (2018)&lt;/a&gt; do just this and find that even on these completely nonsensical sentences, neural models perform better than chance. And &lt;a href=&quot;https://u.cs.biu.ac.il/~yogo/bert-syntax.pdf&quot;&gt;Goldberg (2019)&lt;/a&gt; and &lt;a href=&quot;https://huggingface.co/bert-syntax/extending-bert-syntax.pdf&quot;&gt;Wolf (2019)&lt;/a&gt; evaluate BERT and GPT models on the task and find that they also perform quite well!&lt;/p&gt;
+
+&lt;p&gt;Overall, the main takeaway from this line of work is that our current models have pretty decent knowledge of syntax. Models do pretty well on these agreement test, even when the inputs are nonsensical. Probing results indicate that model representations capture syntactic properties. Whether models are using these syntactic properties when making predictions is still up for debate &lt;a href=&quot;https://www.aclweb.org/anthology/2020.tacl-1.3/&quot;&gt;(Ettinger, 2020)&lt;/a&gt;, but they seem to have decent representations of syntax. This bodes well for using them in both engineering and scientific applications.&lt;/p&gt;
+
+&lt;p&gt;However, one important caveat is that all of these minimal pair datasets only investigate a few verbs for each pair (usually between one and five), so if models get these correct, we can’t be sure of whether they just know these few verbs, or if models get these incorrect, we can’t be sure of whether models actually do have good syntactic knowledge, but we’re just missing it. This is a key issue we take up in the next section.&lt;/p&gt;
+
+&lt;p&gt;See Section 3.1 of &lt;a href=&quot;https://arxiv.org/pdf/2002.12327.pdf&quot;&gt;Rogers (2020)&lt;/a&gt; and Section 2.2 of &lt;a href=&quot;https://www.aclweb.org/anthology/2020.tacl-1.25.pdf&quot;&gt;Warstadt et. al (2020)&lt;/a&gt; for some more discussion of these two evaluation modes.&lt;/p&gt;
+
+&lt;h2 id=&quot;motivating-example&quot;&gt;Motivating Example&lt;/h2&gt;
+
+&lt;p&gt;To motivate the need for refining TSE and to illustrate why the current implementations of TSE might not directly capture &lt;strong&gt;likely behavior&lt;/strong&gt; or &lt;strong&gt;systematicity&lt;/strong&gt;, consider the following toy example:&lt;/p&gt;
+
+&lt;p&gt;Take the same sentence as in (1):&lt;/p&gt;
+
+\[\text{The keys to the cabinet ______ on the table.}\]
+
+&lt;p&gt;Also, let’s say that there are only four verbs in our vocabulary:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;are&lt;/strong&gt; and &lt;strong&gt;is&lt;/strong&gt; (conjugations of “to be”)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;exist&lt;/strong&gt; and &lt;strong&gt;exists&lt;/strong&gt; (conjugations of “to exist”)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Where the probability of each verb filling in the blank under some model is given by the following distribution (the correct conjugations are bolded):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/toy-example.pdf&quot; alt=&quot;toy distribution with are having probability 0.6, is having probability 0.05, exist having probability 0.1, and exists having probability 0.25. Are and exist are bolded because they are the correct conjugations&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Finally, let’s say that in our TSE dataset, the only verbs included are &lt;strong&gt;are&lt;/strong&gt; and &lt;strong&gt;is&lt;/strong&gt;, so when we perform the evaluation for this example, the model gets a score of 1.0 because the model assigns a higher probability to &lt;strong&gt;are&lt;/strong&gt; than to &lt;strong&gt;is&lt;/strong&gt; (\(0.6\) vs \(0.05\)).&lt;/p&gt;
+
+&lt;p&gt;How well does this score address our goals?&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Evaluating &lt;strong&gt;likely behavior&lt;/strong&gt;: Do the generated outputs look grammatical?&lt;br /&gt;
+Well, the total probability mass the model puts on the correct verbs &lt;strong&gt;are&lt;/strong&gt; and &lt;strong&gt;exist&lt;/strong&gt; is \(0.6 + 0.1 = 0.7\), while the total probability mass on the incorrect verbs is \(0.3\). So, if we generated text from the model by sampling, we would expect to see something grammatical with a probability of \(0.7\). This is not quite reflected in the score of \(1.0\), which overestimates the model’s ability to produce grammatical text.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Evaluating &lt;strong&gt;systematicity&lt;/strong&gt;: Does the model conjugate arbitrary verbs correctly?&lt;br /&gt;
+Well, if a model has a systematic understanding of subject-verb number agreement, it would put more probability mass on are than is and more probability mass on &lt;strong&gt;exist&lt;/strong&gt; than &lt;strong&gt;exists&lt;/strong&gt;. Our toy model puts more probability mass on &lt;strong&gt;exists&lt;/strong&gt; rather than &lt;strong&gt;exist&lt;/strong&gt;, so it doesn’t have a systematic understanding of subject-verb number agreement. The score of \(1.0\) does not reflect this lack of systematicity because &lt;strong&gt;exists&lt;/strong&gt;/&lt;strong&gt;exist&lt;/strong&gt; is not in our minimal pair dataset, so the model’s understanding of syntax is overestimated once again.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;refining-targeted-syntactic-evaluation-1&quot;&gt;Refining Targeted Syntactic Evaluation&lt;/h2&gt;
+
+&lt;p&gt;In order to better evaluate &lt;strong&gt;likely behavior&lt;/strong&gt; and &lt;strong&gt;systematicity&lt;/strong&gt;, we propose refining TSE in two different ways: &lt;strong&gt;one score to capture each of our goals&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;To evaluate &lt;strong&gt;likely behavior&lt;/strong&gt;, we introduce &lt;strong&gt;Model Weighted Syntactic Evaluation&lt;/strong&gt; (&lt;strong&gt;MW&lt;/strong&gt;). This score is computed by considering the verbs that are likely to be sampled from models. It’s calculated as the proportion of probability mass put on all correct conjugations to the probability mass put on all conjugations.&lt;sup id=&quot;fnref:3&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:3&quot; class=&quot;footnote&quot; rel=&quot;footnote&quot;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;For toy example above, we would write the score as:&lt;/p&gt;
+
+\[\frac{P_M(\textbf{are}) + P_M(\textbf{exist})}{P_M(\textbf{are}) + P_M(\text{is}) + P_M(\textbf{exist}) + P_M(\text{exists})}\]
+
+&lt;p&gt;where \(P_M\) is the probability under the model in the minimal pair. This would evaluate to \(\frac{0.6+0.1}{0.6+0.05+0.1+0.25} = 0.7\).&lt;/p&gt;
+
+&lt;p&gt;To evaluate &lt;strong&gt;systematicity&lt;/strong&gt;, we introduce &lt;strong&gt;Equally Weighted Syntactic Evaluation&lt;/strong&gt; (&lt;strong&gt;EW&lt;/strong&gt;). The score is computed identically to TSE: it’s the proportion of the verbs from the minimal pair where the model puts a higher probability on the correct conjugation than the incorrect one. Differently from TSE, though, we use a large set of possible verbs for each minimal pair rather than a small, hand-chosen set.&lt;/p&gt;
+
+&lt;p&gt;For the toy example above, we would write this score as:&lt;/p&gt;
+
+\[\frac{1}{2}\left(𝟙[P_M(\textbf{are} &amp;gt; \text{is})] + 𝟙[P_M(\textbf{exist} &amp;gt; \text{exists})]\right)\]
+
+&lt;p&gt;Note that \(P_M(\textbf{are}) &amp;gt; P_M(\text{is})\), but \(P_M(\textbf{exist}) &amp;lt; P_M(\text{exists})\), so the EW score would be \(0.5\).&lt;/p&gt;
+
+&lt;p&gt;It is important to note that a significant component of both of these evaluations is the minimal pairs outside of the verbs. As mentioned in the background, there are a number of datasets that include interesting pairs designed by smart linguists to look at specific lingustic structues. What we do in this work is propose ways to get the most out these pairs, which involves defining the MW and EW scores and, importantly, using a large set of verbs to evaluate them. Rather than the one or two (like in the toy example), we gather a set of 3,562 verbs from three sources (COCA, Penn Treebank and the Giant Verb List).&lt;/p&gt;
+
+&lt;p&gt;We compute these scores to evaluate 4 commonly-used models (BERT-cased, BERT-uncased, RoBERTa, and GPT2) on two minimal pair dataset: &lt;a href=&quot;https://www.aclweb.org/anthology/D18-1151.pdf&quot;&gt;Marvin and Linzen (2018)&lt;/a&gt; and &lt;a href=&quot;https://www.aclweb.org/anthology/2020.tacl-1.25.pdf&quot;&gt;BLiMP (Warstadt et al., 2020)&lt;/a&gt;. We find that the EW scores are lower than the scores previously reported for these datasets, and that even the MW scores show that models still have some room for improvement. (A breakdown in the scores by syntactic structure and model is in the &lt;a href=&quot;https://arxiv.org/abs/2104.09635&quot;&gt;paper&lt;/a&gt;). These results suggest that models’ understanding of subject-verb number agreement is not quite systematic and that while they’re likely to generate correctly conjugated verbs in various syntactic contexts, it is not a guarantee.&lt;/p&gt;
+
+&lt;p&gt;We can also see situations where using a larger set of verbs captures aspects of these models’ abilities that are missed when using a small set of verbs:&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;
+  &lt;p&gt;&lt;img src=&quot;/assets/images/sample-sentences.pdf&quot; alt=&quot;sentences&quot; width=&quot;60%&amp;quot;, text-align=&amp;quot;center&quot; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In these two example sentences, BERT gets the most likely verbs it predicts correct (ie. \(\textbf{meets} &amp;gt; \text{meet}\), \(\textbf{sees} &amp;gt; \text{see}\), \(\textbf{controls} &amp;gt; \text{control}\)). However, the minimal pairs it’s evaluated on include the verbs &lt;strong&gt;like&lt;/strong&gt; and &lt;strong&gt;likes&lt;/strong&gt;, which it gets incorrect. The TSE score for this example suggests the model performs poorly, but the most likely verbs suggest that when sampling, BERT is likely to generate something grammatical.&lt;/p&gt;
+
+&lt;h2 id=&quot;high-and-low-probability-verbs&quot;&gt;High and Low Probability Verbs&lt;/h2&gt;
+
+&lt;p&gt;A natural question that arises from these results is: why are our EW scores lower than the TSE ones?&lt;/p&gt;
+
+&lt;p&gt;One possibility is that the list of verbs we use includes some that are very unlikely in the context of the minimal pair according to the models, and the models conjugate these verbs incorrectly.&lt;/p&gt;
+
+&lt;p&gt;Other work has looked at whether the frequency of word types in minimal pairs affects the ability of models to choose the correct sentence. &lt;a href=&quot;https://www.aclweb.org/anthology/D18-1151.pdf&quot;&gt;Marvin and Linzen (2018)&lt;/a&gt; find that more frequent verbs like &lt;strong&gt;is&lt;/strong&gt;/&lt;strong&gt;are&lt;/strong&gt; are conjugated accurately more often than infrequent verbs like &lt;strong&gt;swim&lt;/strong&gt;/&lt;strong&gt;swims&lt;/strong&gt;. &lt;a href=&quot;https://www.aclweb.org/anthology/2020.emnlp-main.331.pdf&quot;&gt;Yu et al. (2020)&lt;/a&gt; investigate this question for nouns and find that the frequency of nouns in a minimal pair does not correlate with performance on the minimal pair.&lt;/p&gt;
+
+&lt;p&gt;Differently from these approaches, we are interested whether a model’s success on a verb pair is correlated with the likelihood of that verb in the context of the pair. We look at this by considering the verbs that fall into the top 10%, 20%, 30%, and so on as well as the bottom 50%, 10%, 1%, 0.1%, etc. of the model’s probability mass. It turns out that there’s a big difference of up to 40% between success rates on high and low probability verbs! (See the plots below).&lt;/p&gt;
+
+&lt;p&gt;Models tend to perform much better on the verbs in the top percentiles than the bottom. This means if you’re using a sampling strategy like nucleus sampling (&lt;a href=&quot;https://openreview.net/pdf/fe5e0a4c8461032e7d2c289a34236bb349b1b38a.pdf&quot;&gt;Holtzman et al., 2020&lt;/a&gt;), where you only sample from the head of the distribution, but does suggest that these models’ understanding of syntax is not very systematic. That said, the models still perform at &lt;em&gt;above chance&lt;/em&gt; even for the least likely verbs.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/bert-large-cased-ew.png&quot; alt=&quot;More alt text&quot; width=&quot;49%&quot; /&gt;
+&lt;img src=&quot;/assets/images/bert-large-cased-mw.png&quot; alt=&quot;More alt text&quot; width=&quot;49%&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;Recent developments in NLP systems are impressive, and these models are making their way into all sorts of applications. Understanding syntax is an important step underlying both engineering and scientific applications of these systems, so it’s important that our evaluations test features like the likely behavior and systematicity of our models’ syntactic understanding. In the work outlined above, we build on a large set of wonderful previous studies for doing these types of evaluations. Our refinements show that while sampling from models is likely to give grammatical results (especially when truncating the distribution you sample from), there is still room for improvement in the systematicity of these models’ syntactic understanding.&lt;/p&gt;
+
+&lt;p&gt;Many thanks all the amazing people who made this project possible—of course Kai Siang-Ang, Julia Gong, and John Hewitt who decided to continue working on it after it’s infancy in the Winter 2020 offering of Stanford’s CS224N class. Since then we’ve been fortunate to have the support of the Stanford NLP group and feedback and discussions with Tal Linzen, Chris Manning, Rishi Bommasani, Kawin Ethayarajh, Lisa Li, Nelson Liu, Yasuhide Miura, Aaron Mueller, and Tianyi Zhang.&lt;/p&gt;
+
+&lt;div class=&quot;footnotes&quot; role=&quot;doc-endnotes&quot;&gt;
+  &lt;ol&gt;
+    &lt;li id=&quot;fn:1&quot; role=&quot;doc-endnote&quot;&gt;
+      &lt;p&gt;More specifically, in Standard American English syntax, third person, present tense verbs are conjugated differently if the subject is singular or plural. &lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot; role=&quot;doc-backlink&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:2&quot; role=&quot;doc-endnote&quot;&gt;
+      &lt;p&gt;Computed using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bert-base-cased&lt;/code&gt; model on Hugging Face implementation &lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot; role=&quot;doc-backlink&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:3&quot; role=&quot;doc-endnote&quot;&gt;
+      &lt;p&gt;By “all conjugations”, we mean both the third-person singular present tense and third person plural present tense. &lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot; role=&quot;doc-backlink&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;</content><author><name></name></author><summary type="html">Refining Targeted Syntactic Evaluation Ben Newman</summary></entry></feed>
