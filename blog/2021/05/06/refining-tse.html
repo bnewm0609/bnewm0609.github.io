@@ -73,7 +73,7 @@
 
 <p>To illustrate how these evaluations work, let’s test our favorite neural models on the sentences in (1). We can pass BERT the sentence: “The keys to the cabinet &lt;mask&gt; on the table” with the verb masked out, and see if it puts more probability mass on <strong>are</strong> or <strong>is</strong>.</p>
 <div align="center">
-  <p><img src="../../../assets/images/BERT-isare-prediction.pdf" alt="An abstract representation of BERT being fed in sentence (1) from above and outputing a vector that contains are with probability 7.25% and is with probability 0.08%" width="90%" /></p>
+  <p><img src="../../../assets/images/BERT-isare-prediction.png" alt="An abstract representation of BERT being fed in sentence (1) from above and outputing a vector that contains are with probability 7.25% and is with probability 0.08%" width="90%" /></p>
 </div>
 
 <p>In this case, BERT gets it right! It assigns a probability of \(7.25\)% to <strong>are</strong> but only \(0.08\)% to <strong>is</strong>.<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup></p>
@@ -122,7 +122,7 @@
 
 <p>Where the probability of each verb filling in the blank under some model is given by the following distribution (the correct conjugations are bolded):</p>
 
-<p><img src="../../../assets/images/toy-example.pdf" alt="toy distribution with are having probability 0.6, is having probability 0.05, exist having probability 0.1, and exists having probability 0.25. Are and exist are bolded because they are the correct conjugations" /></p>
+<p><img src="../../../assets/images/toy-example.png" alt="toy distribution with are having probability 0.6, is having probability 0.05, exist having probability 0.1, and exists having probability 0.25. Are and exist are bolded because they are the correct conjugations" /></p>
 
 <p>Finally, let’s say that in our TSE dataset, the only verbs included are <strong>are</strong> and <strong>is</strong>, so when we perform the evaluation for this example, the model gets a score of 1.0 because the model assigns a higher probability to <strong>are</strong> than to <strong>is</strong> (\(0.6\) vs \(0.05\)).</p>
 
@@ -166,7 +166,7 @@ Well, if a model has a systematic understanding of subject-verb number agreement
 <p>We can also see situations where using a larger set of verbs captures aspects of these models’ abilities that are missed when using a small set of verbs:</p>
 
 <div align="center">
-  <p><img src="../../../assets/images/sample-sentences.pdf" alt="A stylized picture of BERT making a prediction using the sentence in (1). The picture shows BERT outputing a distribution with are labeled with probability 7.25 percent and is labeled with probability 0..08 percent." width="60%&quot;, text-align=&quot;center" /></p>
+  <p><img src="../../../assets/images/sample-sentences.png" alt="A stylized picture of BERT making a prediction using the sentence in (1). The picture shows BERT outputing a distribution with are labeled with probability 7.25 percent and is labeled with probability 0..08 percent." width="60%&quot;, text-align=&quot;center" /></p>
 </div>
 
 <p>In these two example sentences, BERT gets the most likely verbs it predicts correct (ie. \(\textbf{meets} &gt; \text{meet}\), \(\textbf{sees} &gt; \text{see}\), \(\textbf{controls} &gt; \text{control}\)). However, the minimal pairs it’s evaluated on include the verbs <strong>like</strong> and <strong>likes</strong>, which it gets incorrect. The TSE score for this example suggests the model performs poorly, but the most likely verbs suggest that when sampling, BERT is likely to generate something grammatical.</p>
