@@ -9,17 +9,15 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Refining Targeted Syntactic Evaluation Ben Newman" />
 <meta property="og:description" content="Refining Targeted Syntactic Evaluation Ben Newman" />
-<link rel="canonical" href="www.blnewman.com/2021/05/03/refining-tse.html" />
-<meta property="og:url" content="www.blnewman.com/2021/05/03/refining-tse.html" />
 <meta property="og:site_name" content="Ben Newman" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2021-05-03T00:00:00-07:00" />
+<meta property="article:published_time" content="2021-05-06T00:00:00-07:00" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Refining Targeted Syntactic Evaluation" />
 <script type="application/ld+json">
-{"description":"Refining Targeted Syntactic Evaluation Ben Newman","headline":"Refining Targeted Syntactic Evaluation","dateModified":"2021-05-03T00:00:00-07:00","datePublished":"2021-05-03T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"www.blnewman.com/2021/05/03/refining-tse.html"},"url":"www.blnewman.com/2021/05/03/refining-tse.html","@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"description":"Refining Targeted Syntactic Evaluation Ben Newman","mainEntityOfPage":{"@type":"WebPage","@id":"/2021/05/06/refining-tse.html"},"url":"/2021/05/06/refining-tse.html","headline":"Refining Targeted Syntactic Evaluation","dateModified":"2021-05-06T00:00:00-07:00","datePublished":"2021-05-06T00:00:00-07:00","@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="www.blnewman.com/feed.xml" title="Ben Newman" /><script type="text/javascript" async
+<link rel="stylesheet" href="../../../assets/main.css"><link type="application/atom+xml" rel="alternate" href="../../../feed.xml" title="Ben Newman" /><script type="text/javascript" async
      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
    </script>
   
@@ -30,7 +28,7 @@
 </head>
 <body><header class="site-header" role="banner">
 
-  <div class="wrapper"><a class="site-title" rel="author" href="/">Ben Newman</a><nav class="site-nav">
+  <div class="wrapper"><a class="site-title" rel="author" href="../../../index.html">Ben Newman</a><nav class="site-nav">
         <input type="checkbox" id="nav-trigger" class="nav-trigger" />
         <label for="nav-trigger">
           <span class="menu-icon">
@@ -75,7 +73,7 @@
 
 <p>To illustrate how these evaluations work, let’s test our favorite neural models on the sentences in (1). We can pass BERT the sentence: “The keys to the cabinet &lt;mask&gt; on the table” with the verb masked out, and see if it puts more probability mass on <strong>are</strong> or <strong>is</strong>.</p>
 <div align="center">
-  <p><img src="/assets/images/BERT-isare-prediction.pdf" alt="An abstract representation of BERT being fed in sentence (1) from above and outputing a vector that contains are with probability 7.25% and is with probability 0.08%" width="90%" /></p>
+  <p><img src="../../../assets/images/BERT-isare-prediction.pdf" alt="An abstract representation of BERT being fed in sentence (1) from above and outputing a vector that contains are with probability 7.25% and is with probability 0.08%" width="90%" /></p>
 </div>
 
 <p>In this case, BERT gets it right! It assigns a probability of \(7.25\)% to <strong>are</strong> but only \(0.08\)% to <strong>is</strong>.<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup></p>
@@ -124,7 +122,7 @@
 
 <p>Where the probability of each verb filling in the blank under some model is given by the following distribution (the correct conjugations are bolded):</p>
 
-<p><img src="/assets/images/toy-example.pdf" alt="toy distribution with are having probability 0.6, is having probability 0.05, exist having probability 0.1, and exists having probability 0.25. Are and exist are bolded because they are the correct conjugations" /></p>
+<p><img src="../../../assets/images/toy-example.pdf" alt="toy distribution with are having probability 0.6, is having probability 0.05, exist having probability 0.1, and exists having probability 0.25. Are and exist are bolded because they are the correct conjugations" /></p>
 
 <p>Finally, let’s say that in our TSE dataset, the only verbs included are <strong>are</strong> and <strong>is</strong>, so when we perform the evaluation for this example, the model gets a score of 1.0 because the model assigns a higher probability to <strong>are</strong> than to <strong>is</strong> (\(0.6\) vs \(0.05\)).</p>
 
@@ -168,7 +166,7 @@ Well, if a model has a systematic understanding of subject-verb number agreement
 <p>We can also see situations where using a larger set of verbs captures aspects of these models’ abilities that are missed when using a small set of verbs:</p>
 
 <div align="center">
-  <p><img src="/assets/images/sample-sentences.pdf" alt="sentences" width="60%&quot;, text-align=&quot;center" /></p>
+  <p><img src="../../../assets/images/sample-sentences.pdf" alt="A stylized picture of BERT making a prediction using the sentence in (1). The picture shows BERT outputing a distribution with are labeled with probability 7.25 percent and is labeled with probability 0..08 percent." width="60%&quot;, text-align=&quot;center" /></p>
 </div>
 
 <p>In these two example sentences, BERT gets the most likely verbs it predicts correct (ie. \(\textbf{meets} &gt; \text{meet}\), \(\textbf{sees} &gt; \text{see}\), \(\textbf{controls} &gt; \text{control}\)). However, the minimal pairs it’s evaluated on include the verbs <strong>like</strong> and <strong>likes</strong>, which it gets incorrect. The TSE score for this example suggests the model performs poorly, but the most likely verbs suggest that when sampling, BERT is likely to generate something grammatical.</p>
@@ -181,12 +179,12 @@ Well, if a model has a systematic understanding of subject-verb number agreement
 
 <p>Other work has looked at whether the frequency of word types in minimal pairs affects the ability of models to choose the correct sentence. <a href="https://www.aclweb.org/anthology/D18-1151.pdf">Marvin and Linzen (2018)</a> find that more frequent verbs like <strong>is</strong>/<strong>are</strong> are conjugated accurately more often than infrequent verbs like <strong>swim</strong>/<strong>swims</strong>. <a href="https://www.aclweb.org/anthology/2020.emnlp-main.331.pdf">Yu et al. (2020)</a> investigate this question for nouns and find that the frequency of nouns in a minimal pair does not correlate with performance on the minimal pair.</p>
 
-<p>Differently from these approaches, we are interested whether a model’s success on a verb pair is correlated with the likelihood of that verb in the context of the pair. We look at this by considering the verbs that fall into the top 10%, 20%, 30%, and so on as well as the bottom 50%, 10%, 1%, 0.1%, etc. of the model’s probability mass. It turns out that there’s a big difference of up to 40% between success rates on high and low probability verbs! (See the plots below).</p>
+<p>Differently from these approaches, we are interested whether a model’s success on a verb pair is correlated with the likelihood of that verb in the context of the pair. We look at this by considering the verbs that fall into the top 10%, 20%, 30%, and so on as well as the bottom 50%, 10%, 1%, 0.1%, etc. of the model’s probability mass. It turns out that there’s a difference of up to 40% between success rates on high and low probability verbs! The plots below illustrate this gap on some subsets of the minimal pair datasets.</p>
 
 <p>Models tend to perform much better on the verbs in the top percentiles than the bottom. This means if you’re using a sampling strategy like nucleus sampling (<a href="https://openreview.net/pdf/fe5e0a4c8461032e7d2c289a34236bb349b1b38a.pdf">Holtzman et al., 2020</a>), where you only sample from the head of the distribution, but does suggest that these models’ understanding of syntax is not very systematic. That said, the models still perform at <em>above chance</em> even for the least likely verbs.</p>
 
-<p><img src="/assets/images/bert-large-cased-ew.png" alt="More alt text" width="49%" />
-<img src="/assets/images/bert-large-cased-mw.png" alt="More alt text" width="49%" /></p>
+<p><img src="../../../assets/images/bert-large-cased-ew.png" alt="A plot showing our EW score on a subset of the minimal pairs in Marvin and Linzen, 2018 and BLiMP datasets. The more likely verbs are preferntially conjugated correctly." width="49%" />
+<img src="../../../assets/images/bert-large-cased-mw.png" alt="A plot shwoing our MW scores ona subset of the minimal pairs in Marvin and Linzen, 2018 and BLiMP datatsets. Similar to the EW scores, the most likely verbs are conjugated correctly more often than the least likely verbs." width="49%" /></p>
 
 <h2 id="conclusions">Conclusions</h2>
 
@@ -222,11 +220,11 @@ Well, if a model has a systematic understanding of subject-verb number agreement
           <li class="p-name">Ben Newman</li></ul>
       </div>
 
-      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/bnewm0609"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">bnewm0609</span></a></li></ul>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/bnewm0609"><svg class="svg-icon"><use xlink:href="../../../assets/minima-social-icons.svg#github"></use></svg> <span class="username">bnewm0609</span></a></li></ul>
 </div>
 
       <div class="footer-col footer-col-3">
-        <p>#Linguistics, Natural Language Processing, </p>
+        <p>Linguistics, Natural Language Processing</p>
       </div>
     </div>
 
