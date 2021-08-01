@@ -50,7 +50,7 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>Recent progress in creating amazing NLP models has inspired all sorts of applications. We can now build new <strong>technologies</strong> (like news-summarizers, chatbots, autocomplete, etc.). We can also try to leverage these models to do <strong>science</strong>, like working to better understand how people use and process language (and the world!).</p>
+<p>Recent progress in creating amazing NLP models has inspired all sorts of applications. We can build improved <strong>technologies</strong> (like news-summarizers, chatbots, autocomplete, etc.). We can also try to leverage these models to do <strong>science</strong>, like working to better understand how people use and process language (and the world!).</p>
 
 <p>An important goal for NLP researchers is to make sure that these models are useful for both of these situations. For engineering applications, this might include ensuring models generate text that is factually accurate, coherent, not harmful, etc. And for scientific applications, we might want to ensure that model’s probabilities match people’s beliefs of how probable words are, and that models are accurate and systematic both across languages.</p>
 
@@ -166,7 +166,7 @@ Well, if a model has a systematic understanding of subject-verb number agreement
 <p>We can also see situations where using a larger set of verbs captures aspects of these models’ abilities that are missed when using a small set of verbs:</p>
 
 <div align="center">
-  <p><img src="../../../assets/images/sample-sentences.png" alt="A stylized picture of BERT making a prediction using the sentence in (1). The picture shows BERT outputing a distribution with are labeled with probability 7.25 percent and is labeled with probability 0..08 percent." width="60%&quot;, text-align=&quot;center" /></p>
+  <p><img src="../../../assets/images/sample-sentences.png" alt="A stylized picture of BERT making a prediction using the sentence in (1). The picture shows BERT outputing a distribution with are labeled with probability 7.25 percent and is labeled with probability 0.08 percent." width="60%&quot;, text-align=&quot;center" /></p>
 </div>
 
 <p>In these two example sentences, BERT gets the most likely verbs it predicts correct (ie. \(\textbf{meets} &gt; \text{meet}\), \(\textbf{sees} &gt; \text{see}\), \(\textbf{controls} &gt; \text{control}\)). However, the minimal pairs it’s evaluated on include the verbs <strong>like</strong> and <strong>likes</strong>, which it gets incorrect. The TSE score for this example suggests the model performs poorly, but the most likely verbs suggest that when sampling, BERT is likely to generate something grammatical.</p>
@@ -183,8 +183,8 @@ Well, if a model has a systematic understanding of subject-verb number agreement
 
 <p>Models tend to perform much better on the verbs in the top percentiles than the bottom. This means if you’re using a sampling strategy like nucleus sampling (<a href="https://openreview.net/pdf/fe5e0a4c8461032e7d2c289a34236bb349b1b38a.pdf">Holtzman et al., 2020</a>), where you only sample from the head of the distribution, but does suggest that these models’ understanding of syntax is not very systematic. That said, the models still perform at <em>above chance</em> even for the least likely verbs.</p>
 
-<p><img src="../../../assets/images/bert-large-cased-ew.png" alt="A plot showing our EW score on a subset of the minimal pairs in Marvin and Linzen, 2018 and BLiMP datasets. The more likely verbs are preferntially conjugated correctly." width="49%" />
-<img src="../../../assets/images/bert-large-cased-mw.png" alt="A plot shwoing our MW scores ona subset of the minimal pairs in Marvin and Linzen, 2018 and BLiMP datatsets. Similar to the EW scores, the most likely verbs are conjugated correctly more often than the least likely verbs." width="49%" /></p>
+<p><img src="../../../assets/images/bert-large-cased-ew.png" alt="A plot showing our EW score on a subset of the minimal pairs in Marvin and Linzen (2018) and BLiMP datasets. The more likely verbs are preferntially conjugated correctly." width="49%" />
+<img src="../../../assets/images/bert-large-cased-mw.png" alt="A plot showing our MW scores on a subset of the minimal pairs in Marvin and Linzen (2018) and BLiMP datatsets. Similar to the EW scores, the most likely verbs are conjugated correctly more often than the least likely verbs." width="49%" /></p>
 
 <h2 id="conclusions">Conclusions</h2>
 
