@@ -15,7 +15,8 @@
 <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
 
 <!-- Bootstrap -->
-<link rel="stylesheet" type="text/css"  href="css/bootstrap.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<!--<link rel="stylesheet" type="text/css"  href="css/bootstrap.css">-->
 <link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.css">
 
 <!-- Stylesheet
@@ -28,153 +29,147 @@
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
 </head>
 </header>
 <!-- About Section -->
 <div id="about">
-  <div class="container">
+    <div class="container">
     <div class="section-title text-center center">
       <h1>Ben Newman</h1>
-      <hr>
     </div>
     <div class="row">
       <!--<div class="col-md-12 text-center"><img src="img/Ben_Newman_Prof_pic.jpg" class="img-responsive"></div>-->
       <div class="col-md-4 text-center">
-          <img src="img/Ben_Newman_Prof_pic.jpg" class="img-responsive">
+          <!--<img src="img/Ben_Newman_Prof_pic.jpg" class="img-responsive">-->
+          <img src="img/bnh.jpg" class="img-responsive">
           <p>blnewman at stanford.edu</p>
           <p><a href="https://github.com/bnewm0609">Github</a> | 
-          <a href="Benjamin Newman Resume.pdf">Resume</a> | 
-          <a href="https://scholar.google.com/citations?user=QehvrDoAAAAJ&hl=en">Google Scholar</a><p>
+          <a href="Benjamin Newman Resume.pdf">CV</a> | 
+          <a href="https://scholar.google.com/citations?user=QehvrDoAAAAJ&hl=en">Google Scholar</a> | 
+          <a href="blog/index.html">Blog</a></p>
       </div>
       <!--<div class="col-md-8 col-md-offset-2">-->
-      <div class="col-md-6">
+      <div class="col-md-8">
         <div class="about-text">
-            <p>Hello! I'm Ben Newman, a current senior at Stanford studying Computer Science working with the <a href="https://nlp.stanford.edu">Stanford NLP group</a>. My interests include in computer science, cognitive science, linguistics, education, and misinformation.</p>
-            <p>I'm interested in understanding how NLP systems learn and process language and the role that our systems play in society at large. I've worked on projects analyzing models' abilities to extrapolate, evaluating their ability to communicate, and tracking misinformation in the run-up to the 2020 election. At Stanford Splash I co-teach courses in Introductory Linguistics and Computing Fundamentals.</p>
+            <p>Hello! I'm Ben Newman, currently a Computer Science MS student at Stanford working with the <a href="https://nlp.stanford.edu">Stanford NLP group</a>. I'm interested in understanding how NLP systems learn and process human language and the role language technologies can play in society more broadly.</p>
+            <p>I've worked on projects analyzing models' abilities to extrapolate, process syntax, and communicate. I've also thought about how language technologies can usefully for augmenting human language abilities, both for scientific discovery (e.g. testing psycholinguistic hypotheses) and in political science (e.g. countering minsinformation). I've been a course assistant for <a href="http://cs124.stanford.edu">CS124</a>, Stanford's introductory NLP class, and have co-taught courses in Introductory Linguistics and Computing Fundamentals at Stanford's Splash.</p>
         </div>
       </div>
       <div class="col-md-2"></div>
     </div>
   </div>
+<hr>
 </div>
+<!--<div id="projects" class="text-center">-->
 <div id="projects" class="text-center">
-    <div class="container">
+    <div class="row">
+        <div class="col">
         <div class="section-title center">
             <h2>Publications</h2>
-            <hr> <!-- the horizontal line -->
         </div>
         <div class="categories">
             <div class="btn-project">
                 <p><b>Refining Targeted Syntactic Evaluation</b></p>
-                <p>Benjamin Newman, Kai Siang-Ang, Julia Gong, John Hewitt</p>
+                <p>Benjamin Newman, <a href="https://www.linkedin.com/in/kai-ang"/>Kai Siang-Ang</a>, <a href="http://juliagong.com">Julia Gong</a>, <a href="https://nlp.stanford.edu//~johnhew//">John Hewitt</a></p>
                 <p><i>NAACL 2021</i></p>
-                <p>[<a href="https://arxiv.org/pdf/2104.09635.pdf">pdf</a>] [<a href="https://github.com/bnewm0609/refining-tse">code</a>] [<a href="research/newman2021refining.bib">cite</a>] [<a href="blog/2021/05/06/refining-tse.html">blog</a>]</p>
-                <br/>
-                <p>How should we evaluate the syntactic understanding of our NLP models? We build off of a body of work that uses minimal pair for evaluation and argue that we should be evaluating models' <b>likely behavior</b> and <b>systematicty</b>. We adapt minimal pair evaluation to address these goals, finding the models prefentially conjugate verbs they deem likely.</p>
+                <p>[<a href="https://arxiv.org/pdf/2104.09635.pdf">pdf</a>] [<a href="https://github.com/bnewm0609/refining-tse">code</a>] [<a href="research/newman2021refining.bib">cite</a>] [<a href="blog/2021/05/06/refining-tse.html">blog</a>]
+                [<a class="collapsible">tldr</a>]</p>
+                <div id="project-description-2" style="display: None">
+                    <br/>
+                    <p>How should we evaluate the syntactic understanding of NLP systems? We argue for evaluating models' <b>likely behavior</b> and <b>systematicty</b>, and build off of minimal pair evaluation to address these goals. We find models are better at conjugating verbs they deem likely.</p>
+                </div>
             </div>
             <div class="btn-project">
                 <p><b>The EOS Decision and Length Extrapolation</b></p>
-                <p>Benjamin Newman, John Hewitt, Percy Liang and Chris Manning</p>
+                <p>Benjamin Newman, <a href="https://nlp.stanford.edu//~johnhew//">John Hewitt</a>, <a href="https://cs.stanford.edu/~pliang/">Percy Liang</a> and <a href="https://nlp.stanford.edu/~manning/">Chris Manning</a></p>
                 <p><i>Blackbox NLP@EMNLP 2020</i> (<b>Outstanding Paper</b>)</p>
-                <p>[<a href="https://arxiv.org/pdf/2010.07174.pdf">pdf</a>] [<a href="https://github.com/bnewm0609/eos-decision">code</a>] [<a href="research/newman2020extrapolation.bib">cite</a>]</p>
-                <br/>
-                <p>Why do sequence models struggle to extrapolate? For many reasons, but the decision to train models with End of Sequence tokens at the end of training examples is one of them. We investigate and visualize the effect that this decision has on neural models' extrapolative abilities.</p>
+                <p>[<a href="https://arxiv.org/pdf/2010.07174.pdf">pdf</a>] [<a href="https://github.com/bnewm0609/eos-decision">code</a>] [<a href="research/newman2020extrapolation.bib">cite</a>]
+                [<a class="collapsible">tldr</a>]</p>
+                <div id="project-description-1" style="display: None">
+                    <br/>
+                    <p>Why do sequence models struggle to extrapolate? For many reasons, but the decision to train models with End of Sequence tokens at the end of training examples is one of them. We investigate and visualize the effect that this decision has on neural models' extrapolative abilities.</p>
+                </div>
             </div>
             <div class="btn-project">
-                <!--<h5>Communication-based Evaluation for Natural Language Generation</h5>-->
-                <p><b>Communication-based Evaluation for Natural Language Generation</b></h5>
-                <p>Benjamin Newman, Reuben Cohn-Gordon, and Christopher Potts</p>
+                <p><b>Communication-based Evaluation for Natural Language Generation</b></p>
+            <p>Benjamin Newman, <a href="https://reubencohngordon.com">Reuben Cohn-Gordon</a>, and <a href="https://web.stanford.edu/~cgpotts/">Christopher Potts</a></p>
                 <p><i>Society for Computation in Linguistics@LSA 2020</i></p>
-                <p>[<a href="https://arxiv.org/pdf/1909.07290.pdf">pdf</a>] [<a href="https://github.com/bnewm0609/comm-eval">code</a>] [<a href="https://web.stanford.edu/~cgpotts/reference-info/potts-bibtex.html#Newman:Cohn-Gordon:Potts:2020:SCiL">cite</a>]</p>
-                <br/>
-                <p>Do n-gram overlap metrics like BLEU capture whether the models are successful communicators? Not really, so we created our own way of evaluating communicative effectiveness based on the Rational Speech Acts framework.</p>
-                <p>Conducted during <a href="http://cs224u.stanford.edu">CS224U</a> and the <a href="https://www-csli.stanford.edu">Center for the Study of Language and Information (CSLI)</a> summer internship.</p> 
+                <p>[<a href="https://arxiv.org/pdf/1909.07290.pdf">pdf</a>] [<a href="https://github.com/bnewm0609/comm-eval">code</a>] [<a href="https://web.stanford.edu/~cgpotts/reference-info/potts-bibtex.html#Newman:Cohn-Gordon:Potts:2020:SCiL">cite</a>]
+                [<a class="collapsible">tldr</a>]</p>
+                <div id="project-description-0" style="display: None">
+                    <br/>
+                    <p>Do n-gram overlap metrics like BLEU capture whether the models are successful communicators? Not really, so we introduce a new method for evaluating communicative effectiveness based on the Rational Speech Acts framework.</p>
+                    <p>Conducted during <a href="http://cs224u.stanford.edu">CS224U</a> and the <a href="https://www-csli.stanford.edu">Center for the Study of Language and Information (CSLI)</a> summer internship.</p> 
+                </div>
             </div>
         </div>
+    </div>
+    <div class="col">
         <div class="section-title center">
-            <h2>Projects</h2>
-            <hr> <!-- the horizontal line -->
+            <h2>Large-Scale Collaborations</h2>
         </div>
         <div class="categories">
             <div class="btn-project">
-                <h5>EIP: Election Integrity Partnership</h5>
-                <p>A coalition of research groups that was tracking misinformation in the run-up to the 2020 US election.
-                [<a href="https://www.eipartnership.net">site</a>]</p>
+                <p><b>On the Opportunities and Risks of Foundation Models</b></p>
+                <p>Bommasani et al., 2021</p>
+                <p><i>Misuse Section</i>: <a href="https://atcbosselut.github.io">Antoine Bousselut</a>*, <a href="https://sites.google.com/site/shelbygrossman/">Shelby Grossman</a>*, and Benjamin Newman
+                [<a href="https://arxiv.org/pdf/2108.07258.pdf">pdf</a>]</p>
             </div>
             <div class="btn-project">
-                <h5>Unsupervised Recovery of Tree Metrics from Learned Representations</h5>
+                <p><b>The Long Fuse: Misinformation and the 2020 Election</b></p>
+                <p>The Election Integrity Partnership was a coalition of research groups that tracked misinformation in the run-up to the 2020 US election.
+                [<a href="https://www.eipartnership.net">site</a>][<a href="https://purl.stanford.edu/tr171zs0069">pdf</a>]</p>
+            </div>
+        </div>
+        <div class="section-title center">
+            <h2>Course Projects</h2>
+        </div>
+        <div class="categories">
+            <div class="btn-project">
+                <p><b>Unsupervised Recovery of Tree Metrics from Learned Representations</b></p>
                 <p>Representations from pretrained language models likely incorporate syntax, but can we access it without training supervised probes?
                 [<a href="projects/CS229/CS229_Final_Paper.pdf">pdf</a>]</p>
                 <p><a href="http://web.stanford.edu/class/cs229/">CS229</a>: Machine Learning. Final Project (2019).</p> 
             </div>
             <div class="btn-project">
-                <h5>English-Chinese Name Machine Transliteration Using Search and Neural Networks</h5>
-                <p>What's your name in Chinese? Name translations differ from standard MT as they are based in phoenetics and lack large corpera. We explore two approaches here.
+                <p><b>English-Chinese Name Machine Transliteration Using Search and Neural Networks</b></p>
+                <p>What's your name in Chinese? Translating a name is different from translating an article because name translations are based in phoenetics and lack large corpera. We explore two approaches.
                 [<a href="projects/CS221/CS221_Final_Paper.pdf">pdf</a>] [<a href="https://github.com/bnewm0609/cs221-project">code</a>]</p>
                 <p><a href="http://web.stanford.edu/class/cs221/">CS221</a>: Artificial Intelligence: Principles and Techniques: Final Project with <a href="http://web.stanford.edu/~jxgong/">Julia Gong</a> (<a href="https://en.wikipedia.org/wiki/2018">2018</a>).</p> 
             </div>
             <div class="btn-project">
-                <h5>Using POMDPs to Learn Language in a Spatial Reference Game</h5>
+                <p><b>Using POMDPs to Learn Language in a Spatial Reference Game</b></p>
                 <p>How can you teach computational agents to follow directions without defining what each instruction means? POMDPs! [<a href="projects/CS238/CS238_Final_Paper.pdf">pdf</a>] [<a href="https://github.com/bnewm0609/cs238-project">code</a>]</p>
-                <p><a href="https://web.stanford.edu/class/aa228/cgi-bin/wp/">CS238</a>: Decision Making under Uncertainty: Final Project with <a href="http://suvirpmirchandani.com">Suvir Mirchandani</a> and Levi Lian (2018)</p>
+                <p><a href="https://web.stanford.edu/class/aa228/cgi-bin/wp/">CS238</a>: Decision Making under Uncertainty: Final Project with <a href="http://suvirpmirchandani.com">Suvir Mirchandani</a> and <a href="https://www.levilian.com">Levi Lian</a> (2018)</p>
             </div>
             <div class="btn-project">
-                <h5>Swear Analysis</h5>
+                <p><b>Swear Analysis</b></p>
                 <p>What we can learn about people's use of swears by looking at their word2vec and GLOVE embeddings? [<a href="projects/swear_analysis/swear_analysis.pdf">pdf</a>]</p>
                 <p><a href="https://web.stanford.edu/class/linguist130a/">Linguist 130A</a>: Semantics and Pragmatics: Final Project with <a href="http://web.stanford.edu/~jxgong/">Julia Gong</a> (2018)</p>
             </div>
             <div class="btn-project">
-                <h5>Zero Width Space Encrypter</h5>
+                <p><b>Zero Width Space Encrypter</b></p>
                 <p>Hiding secret messages in HTML zero-width space characters. Demo <a href="projects/whitespace/whitespace.html">here</a>!</p>
             </div>
             <div class="btn-project">
-                <h5><a href="http://stanfordssi.org">Stanford Student Space Initiative (SSI)</a></h5>
+                <p><b><a href="http://stanfordssi.org">Stanford Student Space Initiative (SSI)</a></b></p>
             </div>
-            <!--<p><a class="btn btn-primary btn-long" href="apps/techtalk/techtalk.html">Tech Talk</a></p>-->
         </div>
         <div class="section-title center">
             <h2>Class Notes</h2>
-            <hr> <!-- the horizontal line -->
         </div>
         <div class="categories">
             <div class="btn-project">
-                <h5><a href="splash/In_a_Manner_of_Speaking_2018F.pdf">Stanford Splash Slides: In a Manner of Speaking...</a></h5>
+                <p><b><a href="splash/In_a_Manner_of_Speaking_2018F.pdf">Stanford Splash Slides: In a Manner of Speaking...</a></b></p>
             </div>
             <div class="btn-project">
-                <h5><a href="class-notes/linguistics_notes.pdf">LINGUIST 21N: Linguistic Diversity and Universals</a></h5>
+                <p><b><a href="class-notes/linguistics_notes.pdf">LINGUIST 21N: Linguistic Diversity and Universals</a></b></p>
             </div>
         </div>
     </div>
     </div>
-</div>
-<!-- Contact Section -->
-<div id="contact" class="text-center">
-  <div class="container">
-    <div class="section-title center">
-      <h2>Contact</h2>
-      <hr>
     </div>
-    <div class="text-center">
-      <div> <i class="fa fa-envelope-o fa-2x"></i>
-        <p>blnewman@stanford.edu</p>
-      </div>
-      <div class="clearfix"></div>
     </div>
-    <div class="col-md-8 col-md-offset-2">
-      <div class="social">
-        <ul>
-          <li><a href="https://www.facebook.com/ben.newman.372661"><i class="fa fa-facebook"></i></a></li>
-          <li><a href="https://github.com/bnewm0609"><i class="fa fa-github"></i></a></li>
-          <li><a href="https://www.linkedin.com/in/benjamin-newman-531a52155/"><i class="fa fa-linkedin"></i></a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
 <div id="footer">
   <div class="container text-center">
     <div class="fnav">
@@ -183,7 +178,8 @@
   </div>
 </div>
 <script type="text/javascript" src="js/jquery.1.11.1.js"></script> 
-<script type="text/javascript" src="js/bootstrap.js"></script> 
+<!--<script type="text/javascript" src="js/bootstrap.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/SmoothScroll.js"></script> 
 <script type="text/javascript" src="js/easypiechart.js"></script> 
 <script type="text/javascript" src="js/jquery.prettyPhoto.js"></script> 
